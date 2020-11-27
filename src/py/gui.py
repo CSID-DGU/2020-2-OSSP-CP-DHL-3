@@ -183,7 +183,7 @@ button_request.pack()
 
 champion_list = ['가렌', '갈리오', '갱플랭크', '그라가스', '그레이브즈', '나르', '나미', '나서스', '노틸러스', '녹턴', '누누', '니달리', '니코', '다리우스',
                  '다이애나', '드레이븐', '라이즈', '라칸', '람머스', '럭스', '럼블', '레넥톤', '레오나', '렉사이', '렝가', '루시안', '룰루', '르블랑', '리 신',
-                 '리븐', '리산드라', '릴리아', '마스터이', '마오카이', '말자하', '말파이트', '모데카이저', '모르가나', '문도 박사', '미스 포츈', '바드', '바루스',
+                 '리븐', '리산드라', '릴리아', '마스터 이', '마오카이', '말자하', '말파이트', '모데카이저', '모르가나', '문도 박사', '미스 포츈', '바드', '바루스',
                  '바이', '베이가', '베인', '벨코즈', '볼리베어', '브라움', '브랜드', '블라디미르', '블리츠크랭크', '빅토르', '뽀삐', '사미라', '사이온', '사일러스',
                  '샤코', '세나', '세라핀', '세주아니', '세트', '소나', '소라카', '쉔', '쉬바나', '스웨인', '스카너', '시비르', '신 짜오', '신드라', '신지드',
                  '쓰레쉬', '아리', '아무무', '아우렐리온 솔', '아이번', '아지르', '아칼리', '아트록스', '아펠리오스', '알리스타', '애니', '애니비아', '애쉬', '야스오',
@@ -196,7 +196,7 @@ champion_list = ['가렌', '갈리오', '갱플랭크', '그라가스', '그레�
 image_m, button_m = [], []
 
 for i in range(len(champion_list)):
-    image_m.append(tk.PhotoImage(file=champion_list[i] + '.png').zoom(zoom_size - 2).subsample(subsample_size))
+    image_m.append(tk.PhotoImage(file='../../data/image/champion/' + champion_list[i] + '.png').zoom(zoom_size - 2).subsample(subsample_size))
 
 canvas = tk.Canvas(m_frame)
 canvas.grid(row=0, column=0, sticky="news")
@@ -234,9 +234,10 @@ def click_pick():
     if (select_line_num == -1):
         print('라인을 정해주세요.')
     else:
-        temp = tk.PhotoImage(tk.PhotoImage(file='가렌.png').zoom(zoom_size - 2).subsample(subsample_size))
+        temp = tk.PhotoImage(tk.PhotoImage(file='../../data/image/champion/가렌.png').zoom(zoom_size - 2).subsample(subsample_size))
         if (select_user == 1):
             l1_line.config(text = line[select_line_num] + '\n' + champion_list[select_champion_num])
+
         elif (select_user == 2):
             l2_line.config(text = line[select_line_num] + '\n' + champion_list[select_champion_num])
         elif (select_user == 3):
