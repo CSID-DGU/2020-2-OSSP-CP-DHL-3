@@ -18,7 +18,7 @@ b_frame.grid(row = 0, column = 0, columnspan = 5)
 
 line = [" 탑", "정글", "미드", "원딜", "서폿"]
 global select_champion_num, select_line_num, select
-select_champion_num, select_line_num,  = -1, -1
+select_champion_num, select_line_num,  = None, None
 
 jon = 10
 si = 6
@@ -220,63 +220,63 @@ def click_pick():
         print('라인을 정해주세요.')
     else:
         if (select_user == 1):
-            l1_line.config(text = line[select_line_num])
-            l1_btn = tk.Button(l1_frame, image=image_m[select_champion_num])
             if (not l1_flag):
+                l1_line.config(text = line[select_line_num])
+                l1_btn = tk.Button(l1_frame, image=image_m[select_champion_num])
                 l1_btn.pack(side=tk.LEFT)
                 l1_flag = 1
         elif (select_user == 2):
-            l2_line.config(text=line[select_line_num])
-            l2_btn = tk.Button(l2_frame, image=image_m[select_champion_num])
             if (not l2_flag):
+                l2_line.config(text=line[select_line_num])
+                l2_btn = tk.Button(l2_frame, image=image_m[select_champion_num])
                 l2_btn.pack(side=tk.LEFT)
                 l2_flag = 1
         elif (select_user == 3):
-            l3_line.config(text=line[select_line_num])
-            l3_btn = tk.Button(l3_frame, image=image_m[select_champion_num])
             if (not l3_flag):
+                l3_line.config(text=line[select_line_num])
+                l3_btn = tk.Button(l3_frame, image=image_m[select_champion_num])
                 l3_btn.pack(side=tk.LEFT)
                 l3_flag = 1
         elif (select_user == 4):
-            l4_line.config(text=line[select_line_num])
-            l4_btn = tk.Button(l4_frame, image=image_m[select_champion_num])
             if (not l4_flag):
+                l4_line.config(text=line[select_line_num])
+                l4_btn = tk.Button(l4_frame, image=image_m[select_champion_num])
                 l4_btn.pack(side=tk.LEFT)
                 l4_flag = 1
         elif (select_user == 5):
-            l5_line.config(text=line[select_line_num])
-            l5_btn = tk.Button(l5_frame, image=image_m[select_champion_num])
             if (not l5_flag):
+                l5_line.config(text=line[select_line_num])
+                l5_btn = tk.Button(l5_frame, image=image_m[select_champion_num])
                 l5_btn.pack(side=tk.LEFT)
                 l5_flag = 1
         elif (select_user == 6):
-            r1_line.config(text=line[select_line_num])
-            r1_btn = tk.Button(r1_frame, image=image_m[select_champion_num])
             if (not r1_flag):
+                r1_line.config(text=line[select_line_num])
+                r1_btn = tk.Button(r1_frame, image=image_m[select_champion_num])
                 r1_btn.pack(side=tk.LEFT)
                 r1_flag = 1
         elif (select_user == 7):
-            r2_line.config(text=line[select_line_num])
-            r2_btn = tk.Button(r2_frame, image=image_m[select_champion_num])
             if (not r2_flag):
+                r2_line.config(text=line[select_line_num])
+                r2_btn = tk.Button(r2_frame, image=image_m[select_champion_num])
                 r2_btn.pack(side=tk.LEFT)
                 r2_flag = 1
         elif (select_user == 8):
-            r3_line.config(text=line[select_line_num])
-            r3_btn = tk.Button(r3_frame, image=image_m[select_champion_num])
             if (not r3_flag):
+                r3_line.config(text=line[select_line_num])
+                r3_btn = tk.Button(r3_frame, image=image_m[select_champion_num])
                 r3_btn.pack(side=tk.LEFT)
                 r3_flag = 1
         elif (select_user == 9):
-            r4_line.config(text=line[select_line_num])
-            r4_btn = tk.Button(r4_frame, image=image_m[select_champion_num])
             if (not r4_flag):
+                r4_line.config(text=line[select_line_num])
+                r4_btn = tk.Button(r4_frame, image=image_m[select_champion_num])
                 r4_btn.pack(side=tk.LEFT)
                 r4_flag = 1
         elif (select_user == 10):
-            r5_line.config(text=line[select_line_num])
-            r5_btn = tk.Button(r5_frame, image=image_m[select_champion_num])
             if (not r5_flag):
+                r5_line.config(text=line[select_line_num])
+                r5_btn = tk.Button(r5_frame, image=image_m[select_champion_num])
                 r5_btn.pack(side=tk.LEFT)
                 r5_flag = 1
         elif (select_user == 11):
@@ -329,6 +329,8 @@ def click_pick():
             if (not b10_flag):
                 b10_btn.pack(side=tk.LEFT)
                 b10_flag = 1
+        button_m[select_champion_num].config(state=tk.DISABLED)
+        select_champion_num = None
 
 button_pick.config(command=lambda: click_pick())
 
