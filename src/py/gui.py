@@ -143,7 +143,7 @@ choice_frame.grid(row=2, column=0)
 
 rec_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.33, height=y * 0.1)
 rec_frame.grid(row=0, column=0)
-button_recommend = tk.Button(rec_frame, width=21, height=3, text="추천받기")
+button_recommend = tk.Button(rec_frame, width=21, height=3, text="추천받기", command = discriminant())
 button_recommend.pack()
 
 select_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.34, height=y * 0.1)
@@ -335,6 +335,109 @@ def click_pick():
             ban.append(select_champion_num)
         button_m[select_champion_num].config(state=tk.DISABLED)
         select_champion_num = None
+
+with open('../data/pickle/numberWinsChampion.pickle', 'rb') as fr:
+    numberWinsChampion = pickle.load(fr)
+
+
+positions = [top_dict, jungle_dict, mid_dict, carry_dict, sup_dict]
+
+def discriminant(my_position):
+    추천갯수 = 10
+    enemy_position = my_position  # 적 포지션 = 내 포지션
+    position_dict = {}
+    if my_position == 0:
+        comb_position = 1  # 탑 + 정글
+        position_dict = positions[0]
+
+    elif my_position == 1:
+        comb_position = 2  # 정글 + 미드
+        position_dict = positions[1]
+
+    elif my_position == 2:
+        comb_position = 1  # 미드 + 정글
+        position_dict = positions[2]
+
+    elif my_position == 3:
+        comb_position = 4  # 원딜 + 서폿
+        position_dict = positions[3]
+
+    elif my_position == 4:
+        comb_position = 3  # 서폿 + 원딜
+        position_dict = positions[4]
+
+    아군존재, 상대존재 = False, False
+    아군, 상대 = [], []
+
+    # ----------------------------------------------------------------------------------------------------
+    for pick in team1:  # 아군 존재
+        if pick[1] == comb_position:
+            아군존재 = True
+            아군 = pick
+
+    for pick in team2:  # 적군 존재
+        if pick[1] == enemy_position:
+            상대존재 = True
+            상대 = pick
+    # ---------------------------------------------------------------------------------------------------------
+    if 아군존재 and 상대존재:  # 아군o 상대o
+        아군승률 = dict(comb_win_rate.loc[아군[0]][:])
+        추천픽리스트1 = []
+        for k, v in 아군승률.items():
+            추천픽리스트1.append([k, v])
+
+        상대승률 = dict(total_win_rate.loc[상대[0]][:])
+        추천픽리스트2 = []
+        for k, v in 상대승률.items():
+            추천픽리스트2.append([k, round(1 - v, 4)])
+
+        최종추천 = []
+        for 픽 in zip(추천픽리스트1, 추천픽리스트2):
+            최종추천.append([픽[0][0], 픽[0][1] + 픽[1][1]])
+
+        최종추천.sort(key=lambda x: x[1], reverse=True)
+
+        리얼최종추천 = []
+        for 추천픽, 승률 in 최종추천:
+            if 추천픽 in list(position_dict.keys()):
+                if 추천픽 != 상대[0]:
+                    리얼최종추천.append([추천픽, 승률])
+
+        return 리얼최종추천[:5]
+
+    elif not 아군존재 and 상대존재:  # 아군x 상대o
+        상대승률 = dict(total_win_rate.loc[상대[0]][:])
+        상대승률 = sorted(상대승률.items(), key=lambda x: x[1])
+        추천픽리스트 = []
+        n = 0
+        for 추천픽, 승률 in 상대승률:
+            if n == 추천갯수:  # 10개 까지 추천해줌
+                break
+            if 추천픽 in list(position_dict.keys()):
+                추천픽리스트.append([추천픽, 1 - 승률])
+                n += 1
+
+        return 추천픽리스트[:5]  # 그중에 상위 5개만 출력
+
+    elif 아군존재 and not 상대존재:  # 아군o 상대x
+        아군승률 = dict(comb_win_rate.loc[아군[0]][:])
+        아군승률 = sorted(아군승률.items(), key=lambda x: x[1], reverse=True)
+        추천픽리스트 = []
+        n = 0
+        for 추천픽, 승률 in 아군승률:
+            if n == 추천갯수:
+                break
+            if 추천픽 in list(position_dict.keys()):
+                추천픽리스트.append([추천픽, 승률])
+                n += 1
+        for i in range(len(추천픽리스트)):
+            if 추천픽리스트[i][0] in banlist:
+                del 추천픽리슽[a.index(3)]
+
+        return 추천픽리스트[:5]
+
+    elif not (아군존재 and 상대존재):  # 아군x 상대x
+        print('원하는 챔피언을 선택하세요 ')
 
 button_pick.config(command=lambda: click_pick())
 
