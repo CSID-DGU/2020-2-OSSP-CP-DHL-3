@@ -203,6 +203,7 @@ l1_flag, l2_flag, l3_flag, l4_flag, l5_flag = 0, 0, 0, 0, 0
 r1_flag, r2_flag, r3_flag, r4_flag, r5_flag = 0, 0, 0, 0, 0
 b1_flag, b2_flag, b3_flag, b4_flag, b5_flag = 0, 0, 0, 0, 0
 b6_flag, b7_flag, b8_flag, b9_flag, b10_flag = 0, 0, 0, 0, 0
+team1, team2 = [], []
 
 def click_pick():
     global select_champion_num, select_line_num, select
@@ -326,6 +327,10 @@ def click_pick():
             if (not b10_flag):
                 b10_btn.pack(side=tk.LEFT)
                 b10_flag = 1
+        if (1 <= select_user and select_user <= 5):
+            team1.append([select_champion_num, select_line_num])
+        elif (6 <= select_user and select_user <= 10):
+            team2.append([select_champion_num, select_line_num])
         button_m[select_champion_num].config(state=tk.DISABLED)
         select_champion_num = None
 
