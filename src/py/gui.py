@@ -1,4 +1,6 @@
 import tkinter as tk
+import pandas
+import pickle
 
 x = 960
 y = 690
@@ -143,8 +145,6 @@ choice_frame.grid(row=2, column=0)
 
 rec_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.33, height=y * 0.1)
 rec_frame.grid(row=0, column=0)
-button_recommend = tk.Button(rec_frame, width=21, height=3, text="추천받기", command = discriminant())
-button_recommend.pack()
 
 select_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.34, height=y * 0.1)
 select_frame.grid(row=0, column=1)
@@ -336,9 +336,20 @@ def click_pick():
         button_m[select_champion_num].config(state=tk.DISABLED)
         select_champion_num = None
 
-with open('../data/pickle/numberWinsChampion.pickle', 'rb') as fr:
-    numberWinsChampion = pickle.load(fr)
-
+with open('../../data/pickle/top_dict.pickle', 'rb') as fr:
+    top_dict = pickle.load(fr)
+with open('../../data/pickle/jungle_dict.pickle', 'rb') as fr:
+    jungle_dict = pickle.load(fr)
+with open('../../data/pickle/mid_dict.pickle', 'rb') as fr:
+    mid_dict = pickle.load(fr)
+with open('../../data/pickle/carry_dict.pickle', 'rb') as fr:
+    carry_dict = pickle.load(fr)
+with open('../../data/pickle/sup_dict.pickle', 'rb') as fr:
+    sup_dict = pickle.load(fr)
+with open('../../data/pickle/comb_win_rate.pickle', 'rb') as fr:
+    comb_win_rate = pickle.load(fr)
+with open('../../data/pickle/total_win_rate.pickle', 'rb') as fr:
+    total_win_rate = pickle.load(fr)
 
 positions = [top_dict, jungle_dict, mid_dict, carry_dict, sup_dict]
 
@@ -402,7 +413,7 @@ def discriminant(my_position):
             if 추천픽 in list(position_dict.keys()):
                 if 추천픽 != 상대[0]:
                     리얼최종추천.append([추천픽, 승률])
-
+        print(리얼최종추천[:5])
         return 리얼최종추천[:5]
 
     elif not 아군존재 and 상대존재:  # 아군x 상대o
@@ -416,7 +427,7 @@ def discriminant(my_position):
             if 추천픽 in list(position_dict.keys()):
                 추천픽리스트.append([추천픽, 1 - 승률])
                 n += 1
-
+        print(추천픽리스트[:5])
         return 추천픽리스트[:5]  # 그중에 상위 5개만 출력
 
     elif 아군존재 and not 상대존재:  # 아군o 상대x
@@ -431,14 +442,16 @@ def discriminant(my_position):
                 추천픽리스트.append([추천픽, 승률])
                 n += 1
         for i in range(len(추천픽리스트)):
-            if 추천픽리스트[i][0] in banlist:
-                del 추천픽리슽[a.index(3)]
-
+            if 추천픽리스트[i][0] in ban:
+                del 추천픽리스트[추천픽리스트.index(3)]
+        print(추천픽리스트[:5])
         return 추천픽리스트[:5]
 
     elif not (아군존재 and 상대존재):  # 아군x 상대x
         print('원하는 챔피언을 선택하세요 ')
 
+button_recommend = tk.Button(rec_frame, width=21, height=3, text="추천받기", command=lambda: discriminant(select_line_num))
+button_recommend.pack()
 button_pick.config(command=lambda: click_pick())
 
 root.mainloop()
