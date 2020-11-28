@@ -20,50 +20,47 @@ line = [" 탑", "정글", "미드", "원딜", "서폿"]
 global select_champion_num, select_line_num, select
 select_champion_num, select_line_num,  = None, None
 
-jon = 10
-si = 6
-
 select = tk.IntVar()
 
 b1_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b1_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b1_frame, value = 11, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b1_frame, value = 11, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 b2_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b2_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b2_frame, value = 12, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b2_frame, value = 12, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 b3_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b3_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b3_frame, value = 13, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b3_frame, value = 13, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 b4_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b4_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b4_frame, value = 14, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b4_frame, value = 14, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 b5_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b5_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b5_frame, value = 15, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b5_frame, value = 15, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 b6_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b6_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b6_frame, value = 16, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b6_frame, value = 16, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 b7_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b7_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b7_frame, value = 17, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b7_frame, value = 17, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 b8_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b8_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b8_frame, value = 18, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b8_frame, value = 18, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 b9_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b9_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b9_frame, value = 19, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b9_frame, value = 19, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 b10_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b10_frame.pack(side = tk.LEFT)
-tk.Radiobutton(b10_frame, value = 20, variable=select, width = jon, activebackground="blue").pack(side=tk.BOTTOM)
+tk.Radiobutton(b10_frame, value = 20, variable=select, width = 10, activebackground="blue").pack(side=tk.BOTTOM)
 
 l1_frame = tk.Frame(frame, width = x * 0.2, height = y * 0.17)
 l1_frame.grid(row = 1, column = 0)
