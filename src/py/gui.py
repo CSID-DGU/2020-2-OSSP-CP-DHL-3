@@ -354,6 +354,7 @@ with open('../../data/pickle/total_win_rate', 'rb') as fr:
 positions = [top_dict, jungle_dict, mid_dict, carry_dict, sup_dict]
 
 def discriminant(my_position):
+    print('현재 설정된 라인은 {0}입니다. '.format(my_position))
     추천갯수 = 10
     enemy_position = my_position  # 적 포지션 = 내 포지션
     position_dict = {}
@@ -378,7 +379,7 @@ def discriminant(my_position):
         position_dict = positions[4]
 
     아군존재, 상대존재 = False, False
-
+    아군, 상대 = [], []
     # ----------------------------------------------------------------------------------------------------
     for pick in team1:  # 아군 존재
         if pick[1] == comb_position:
@@ -389,6 +390,7 @@ def discriminant(my_position):
         if pick[1] == enemy_position:
             상대존재 = True
             상대 = pick
+    print(아군, 상대)
     # ---------------------------------------------------------------------------------------------------------
     if 아군존재 and 상대존재:  # 아군o 상대o
         아군승률 = dict(comb_win_rate.loc[아군[0]][:])
@@ -412,7 +414,7 @@ def discriminant(my_position):
             if 추천픽 in list(position_dict.keys()):
                 if 추천픽 != 상대[0]:
                     리얼최종추천.append([추천픽, 승률])
-        print('1번 상황 {0}'.format(리얼최종추천[:5]))
+        print('현재 라인 {0}은 1번 상황 {1}'.format(my_position, 리얼최종추천[:5]))
         return 리얼최종추천[:5]
 
     elif not 아군존재 and 상대존재:  # 아군x 상대o
@@ -426,7 +428,7 @@ def discriminant(my_position):
             if 추천픽 in list(position_dict.keys()):
                 추천픽리스트.append([추천픽, 1 - 승률])
                 n += 1
-        print('2번 상황 {0}'.format(추천픽리스트[:5]))
+        print('현재 라인 {0}은 2번 상황 {1}'.format(my_position, 추천픽리스트[:5]))
         return 추천픽리스트[:5]  # 그중에 상위 5개만 출력
 
     elif 아군존재 and not 상대존재:  # 아군o 상대x
@@ -443,7 +445,7 @@ def discriminant(my_position):
         for i in range(len(추천픽리스트)):
             if 추천픽리스트[i][0] in ban:
                 del 추천픽리스트[추천픽리스트.index(3)]
-        print('3번 상황 {0}'.format(추천픽리스트[:5]))
+        print('현재 라인은 {0} 3번 상황 {1}'.format(my_position, 추천픽리스트[:5]))
         return 추천픽리스트[:5]
 
     elif not (아군존재 and 상대존재):  # 아군x 상대x
