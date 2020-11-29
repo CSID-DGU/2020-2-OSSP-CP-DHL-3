@@ -1,12 +1,10 @@
 import tkinter as tk
-import pandas
 import pickle
 
 x = 960
 y = 690
 zoom_size = 24
 subsample_size = 30
-
 size = str(x) + "x" + str(y)
 root = tk.Tk()
 root.title('DHL')
@@ -14,15 +12,36 @@ root.geometry(size)
 root.resizable(False, False)
 frame = tk.Frame(root, bd = 5, bg='white', relief = 'groove')
 frame.pack()
-
 b_frame = tk.Frame(frame, width = x * 1, height = y * 0.166)
 b_frame.grid(row = 0, column = 0, columnspan = 5)
 
+image_m, button_m, team1, team2, ban = [], [], [], [], []
 line = [" 탑", "정글", "미드", "원딜", "서폿"]
 global select_champion_num, select_line_num, select
 select_champion_num, select_line_num,  = None, None
-
 select = tk.IntVar()
+CheckVariety = tk.IntVar()
+global l1_flag, l2_flag, l3_flag, l4_flag, l5_flag, r1_flag, r2_flag, r3_flag, r4_flag, r5_flag, b1_flag, b2_flag, b3_flag, b4_flag, b5_flag, b6_flag, b7_flag, b8_flag, b9_flag, b10_flag
+l1_flag, l2_flag, l3_flag, l4_flag, l5_flag, r1_flag, r2_flag, r3_flag, r4_flag, r5_flag = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+b1_flag, b2_flag, b3_flag, b4_flag, b5_flag, b6_flag, b7_flag, b8_flag, b9_flag, b10_flag = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+with open('../../data/pickle/top_dict', 'rb') as fr:
+    top_dict = pickle.load(fr)
+with open('../../data/pickle/jungle_dict', 'rb') as fr:
+    jungle_dict = pickle.load(fr)
+with open('../../data/pickle/mid_dict', 'rb') as fr:
+    mid_dict = pickle.load(fr)
+with open('../../data/pickle/carry_dict', 'rb') as fr:
+    carry_dict = pickle.load(fr)
+with open('../../data/pickle/sup_dict', 'rb') as fr:
+    sup_dict = pickle.load(fr)
+with open('../../data/pickle/comb_win_rate', 'rb') as fr:
+    comb_win_rate = pickle.load(fr)
+with open('../../data/pickle/total_win_rate', 'rb') as fr:
+    total_win_rate = pickle.load(fr)
+with open('../../data/pickle/champ_dict', 'rb') as fr:
+    champ_dict = pickle.load(fr)
+positions = [top_dict, jungle_dict, mid_dict, carry_dict, sup_dict]
 
 b1_frame = tk.Frame(b_frame, width = x * 0.1, height = y * 0.166)
 b1_frame.pack(side = tk.LEFT)
@@ -133,18 +152,16 @@ option_frame.grid(row = 5, column = 1)
 line_frame = tk.Frame(option_frame, width = x * 0.61, height = y * 0.066)
 line_frame.grid(row = 1, column = 0)
 
-CheckVariety = tk.IntVar()
-tk.Radiobutton(line_frame, text="탑", value = 0, width = 10, variable=CheckVariety, activebackground="blue").pack(side=tk.LEFT)
-tk.Radiobutton(line_frame, text="정글", value = 1, width = 10, variable=CheckVariety, activebackground="blue").pack(side=tk.LEFT)
-tk.Radiobutton(line_frame, text="미드", value = 2, width = 10, variable=CheckVariety, activebackground="blue").pack(side=tk.LEFT)
-tk.Radiobutton(line_frame, text="원딜", value = 3, width = 10, variable=CheckVariety, activebackground="blue").pack(side=tk.LEFT)
-tk.Radiobutton(line_frame, text="서폿", value = 4, width = 10, variable=CheckVariety, activebackground="blue").pack(side=tk.LEFT)
+for i, _ in enumerate(line):
+    tk.Radiobutton(line_frame, text=_, value=i, width=10, variable=CheckVariety, activebackground="blue").pack(side=tk.LEFT)
 
 choice_frame = tk.Frame(option_frame, width=x * 0.6, height=y * 0.1)
 choice_frame.grid(row=2, column=0)
 
 rec_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.33, height=y * 0.1)
 rec_frame.grid(row=0, column=0)
+button_recommend = tk.Button(rec_frame, width=21, height=3, text="추천받기", command=lambda : discriminant(select_line_num))
+button_recommend.pack()
 
 select_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.34, height=y * 0.1)
 select_frame.grid(row=0, column=1)
@@ -168,8 +185,6 @@ champion_list = ['가렌', '갈리오', '갱플랭크', '그라가스', '그레�
                  '코그모', '코르키', '퀸', '클레드', '키아나', '킨드레드', '타릭', '탈론', '탈리야', '탐 켄치', '트런들', '트리스타나', '트린다미어',
                  '트위스티드 페이트', '트위치', '티모', '파이크', '판테온', '피들스틱', '피오라', '피즈', '하이머딩거', '헤카림']
 
-image_m, button_m = [], []
-
 for i in range(len(champion_list)):
     image_m.append(tk.PhotoImage(file='../../data/image/champion/' + champion_list[i] + '.png').zoom(zoom_size - 2).subsample(subsample_size))
 canvas = tk.Canvas(m_frame)
@@ -191,19 +206,14 @@ m_frame.config(width=firstcolumns_width + scroll.winfo_width(), height=firstrows
 canvas.configure(width=firstcolumns_width + scroll.winfo_width(), height=firstrows_height)
 canvas.config(scrollregion=canvas.bbox("all"))
 
-def click_champion(num):
-    global select_champion_num
-    select_champion_num = num
-
 for i, v in enumerate(champion_list):
     button_m[i].config(command=lambda idx=i: click_champion(idx))
 
-global l1_flag, l2_flag, l3_flag, l4_flag, l5_flag, r1_flag, r2_flag, r3_flag, r4_flag, r5_flag, b1_flag, b2_flag, b3_flag, b4_flag, b5_flag, b6_flag, b7_flag, b8_flag, b9_flag, b10_flag
-l1_flag, l2_flag, l3_flag, l4_flag, l5_flag = 0, 0, 0, 0, 0
-r1_flag, r2_flag, r3_flag, r4_flag, r5_flag = 0, 0, 0, 0, 0
-b1_flag, b2_flag, b3_flag, b4_flag, b5_flag = 0, 0, 0, 0, 0
-b6_flag, b7_flag, b8_flag, b9_flag, b10_flag = 0, 0, 0, 0, 0
-team1, team2, ban = [], [], []
+button_pick.config(command=lambda: click_pick())
+
+def click_champion(num):
+    global select_champion_num
+    select_champion_num = num
 
 def click_pick():
     global select_champion_num, select_line_num, select
@@ -337,25 +347,6 @@ def click_pick():
         button_m[select_champion_num].config(state=tk.DISABLED)
         select_champion_num = None
 
-with open('../../data/pickle/top_dict', 'rb') as fr:
-    top_dict = pickle.load(fr)
-with open('../../data/pickle/jungle_dict', 'rb') as fr:
-    jungle_dict = pickle.load(fr)
-with open('../../data/pickle/mid_dict', 'rb') as fr:
-    mid_dict = pickle.load(fr)
-with open('../../data/pickle/carry_dict', 'rb') as fr:
-    carry_dict = pickle.load(fr)
-with open('../../data/pickle/sup_dict', 'rb') as fr:
-    sup_dict = pickle.load(fr)
-with open('../../data/pickle/comb_win_rate', 'rb') as fr:
-    comb_win_rate = pickle.load(fr)
-with open('../../data/pickle/total_win_rate', 'rb') as fr:
-    total_win_rate = pickle.load(fr)
-with open('../../data/pickle/champ_dict', 'rb') as fr:
-    champ_dict = pickle.load(fr)
-
-positions = [top_dict, jungle_dict, mid_dict, carry_dict, sup_dict]
-
 def discriminant(my_position):
     추천갯수 = 10
     enemy_position = my_position  # 적 포지션 = 내 포지션
@@ -382,7 +373,6 @@ def discriminant(my_position):
 
     아군존재, 상대존재 = False, False
     아군, 상대 = [], []
-    # ----------------------------------------------------------------------------------------------------
     for pick in team1:  # 아군 존재
         if pick[1] == comb_position:
             아군존재 = True
@@ -396,8 +386,6 @@ def discriminant(my_position):
         아군[0] = champ_dict[아군[0]]
     if 상대:
         상대[0] = champ_dict[상대[0]]
-    print(아군, 상대)
-    # ---------------------------------------------------------------------------------------------------------
     if 아군존재 and 상대존재:  # 아군o 상대o
         아군승률 = dict(comb_win_rate.loc[아군[0]][:])
         추천픽리스트1 = []
@@ -447,6 +435,7 @@ def discriminant(my_position):
                 if value == 추천픽리스트[_][0]:
                     print('{0} : {1}%'.format(key, round(추천픽리스트[_][1], 2)))
                     break;
+        print('-----------------------')
         return 추천픽리스트[:5]  # 그중에 상위 5개만 출력
 
     elif 아군존재 and not 상대존재:  # 아군o 상대x
@@ -474,11 +463,5 @@ def discriminant(my_position):
 
     elif not (아군존재 and 상대존재):  # 아군x 상대x
         print('원하는 챔피언을 직접 선택하세요 ')
-
-button_recommend = tk.Button(rec_frame, width=21, height=3, text="추천받기", command=lambda : discriminant(select_line_num))
-button_recommend.pack()
-
-
-button_pick.config(command=lambda: click_pick())
 
 root.mainloop()
