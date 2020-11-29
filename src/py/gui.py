@@ -328,11 +328,12 @@ def click_pick():
                 b10_btn.pack(side=tk.LEFT)
                 b10_flag = 1
         if (1 <= select_user and select_user <= 5):
-            team1.append([select_champion_num, select_line_num])
+            team1.append([champion_list[select_champion_num], select_line_num])
         elif (6 <= select_user and select_user <= 10):
-            team2.append([select_champion_num, select_line_num])
-        elif (11 <= select_user and select_user <= 20):
+            team2.append([champion_list[select_champion_num], select_line_num])
             ban.append(select_champion_num)
+        elif (11 <= select_user and select_user <= 20):
+            ban.append(champion_list[select_champion_num])
         button_m[select_champion_num].config(state=tk.DISABLED)
         select_champion_num = None
 
@@ -350,11 +351,12 @@ with open('../../data/pickle/comb_win_rate', 'rb') as fr:
     comb_win_rate = pickle.load(fr)
 with open('../../data/pickle/total_win_rate', 'rb') as fr:
     total_win_rate = pickle.load(fr)
+with open('../../data/pickle/champ_dict', 'rb') as fr:
+    champ_dict = pickle.load(fr)
 
 positions = [top_dict, jungle_dict, mid_dict, carry_dict, sup_dict]
 
 def discriminant(my_position):
-    print('현재 설정된 라인은 {0}입니다. '.format(my_position))
     추천갯수 = 10
     enemy_position = my_position  # 적 포지션 = 내 포지션
     position_dict = {}
@@ -384,12 +386,16 @@ def discriminant(my_position):
     for pick in team1:  # 아군 존재
         if pick[1] == comb_position:
             아군존재 = True
-            아군 = pick
+            아군 = pick.copy()
 
     for pick in team2:  # 적군 존재
         if pick[1] == enemy_position:
             상대존재 = True
-            상대 = pick
+            상대 = pick.copy()
+    if 아군:
+        아군[0] = champ_dict[아군[0]]
+    if 상대:
+        상대[0] = champ_dict[상대[0]]
     print(아군, 상대)
     # ---------------------------------------------------------------------------------------------------------
     if 아군존재 and 상대존재:  # 아군o 상대o
@@ -414,7 +420,13 @@ def discriminant(my_position):
             if 추천픽 in list(position_dict.keys()):
                 if 추천픽 != 상대[0]:
                     리얼최종추천.append([추천픽, 승률])
-        print('현재 라인 {0}은 1번 상황 {1}'.format(my_position, 리얼최종추천[:5]))
+        print('---추천하는 챔피언 리스트---')
+        for _ in range(5):
+            for key, value in champ_dict.items():
+                if value == 리얼최종추천[_][0]:
+                    print('{0} : {1}%'.format(key, round(리얼최종추천[_][1] / 2, 2)))
+                    break ;
+        print('-----------------------')
         return 리얼최종추천[:5]
 
     elif not 아군존재 and 상대존재:  # 아군x 상대o
@@ -428,7 +440,13 @@ def discriminant(my_position):
             if 추천픽 in list(position_dict.keys()):
                 추천픽리스트.append([추천픽, 1 - 승률])
                 n += 1
-        print('현재 라인 {0}은 2번 상황 {1}'.format(my_position, 추천픽리스트[:5]))
+
+        print('---추천하는 챔피언 리스트---')
+        for _ in range(5):
+            for key, value in champ_dict.items():
+                if value == 추천픽리스트[_][0]:
+                    print('{0} : {1}%'.format(key, round(추천픽리스트[_][1], 2)))
+                    break;
         return 추천픽리스트[:5]  # 그중에 상위 5개만 출력
 
     elif 아군존재 and not 상대존재:  # 아군o 상대x
@@ -445,11 +463,17 @@ def discriminant(my_position):
         for i in range(len(추천픽리스트)):
             if 추천픽리스트[i][0] in ban:
                 del 추천픽리스트[추천픽리스트.index(3)]
-        print('현재 라인은 {0} 3번 상황 {1}'.format(my_position, 추천픽리스트[:5]))
+        print('---추천하는 챔피언 리스트---')
+        for _ in range(5):
+            for key, value in champ_dict.items():  # for name, age in dictionary.iteritems():  (for Python 2.x)
+                if value == 추천픽리스트[_][0]:
+                    print('{0} : {1}%'.format(key, round(추천픽리스트[_][1], 2)))
+                    break ;
+        print('-----------------------')
         return 추천픽리스트[:5]
 
     elif not (아군존재 and 상대존재):  # 아군x 상대x
-        print('원하는 챔피언을 선택하세요 ')
+        print('원하는 챔피언을 직접 선택하세요 ')
 
 button_recommend = tk.Button(rec_frame, width=21, height=3, text="추천받기", command=lambda : discriminant(select_line_num))
 button_recommend.pack()
