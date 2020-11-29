@@ -454,6 +454,7 @@ def discriminant(my_position):
 button_recommend = tk.Button(rec_frame, width=21, height=3, text="추천받기", command=lambda : discriminant(select_line_num))
 button_recommend.pack()
 
+
 button_pick.config(command=lambda: click_pick())
 
 root.mainloop()
