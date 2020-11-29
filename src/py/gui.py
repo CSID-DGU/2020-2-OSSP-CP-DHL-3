@@ -18,7 +18,7 @@ b_frame.grid(row = 0, column = 0, columnspan = 5)
 image_m, button_m, team1, team2, ban = [], [], [], [], []
 line = [" 탑", "정글", "미드", "원딜", "서폿"]
 global select_champion_num, select_line_num, select
-select_champion_num, select_line_num,  = None, None
+select_champion_num, select_line_num = None, None
 select = tk.IntVar()
 CheckVariety = tk.IntVar()
 global l1_flag, l2_flag, l3_flag, l4_flag, l5_flag, r1_flag, r2_flag, r3_flag, r4_flag, r5_flag, b1_flag, b2_flag, b3_flag, b4_flag, b5_flag, b6_flag, b7_flag, b8_flag, b9_flag, b10_flag
