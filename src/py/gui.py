@@ -412,9 +412,9 @@ def discriminant(my_position):
         for _ in range(5):
             for key, value in champ_dict.items():
                 if value == 리얼최종추천[_][0]:
-                    print('{0} : {1}%'.format(key, round(리얼최종추천[_][1] / 2, 2)))
+                    print('{0}'.format(key), end = " ")
                     break ;
-        print('-----------------------')
+        print('\n-----------------------')
         return 리얼최종추천[:5]
 
     elif not 아군존재 and 상대존재:  # 아군x 상대o
@@ -433,9 +433,9 @@ def discriminant(my_position):
         for _ in range(5):
             for key, value in champ_dict.items():
                 if value == 추천픽리스트[_][0]:
-                    print('{0} : {1}%'.format(key, round(추천픽리스트[_][1], 2)))
+                    print('{0}'.format(key), end = " ")
                     break;
-        print('-----------------------')
+        print('\n-----------------------')
         return 추천픽리스트[:5]  # 그중에 상위 5개만 출력
 
     elif 아군존재 and not 상대존재:  # 아군o 상대x
@@ -454,11 +454,11 @@ def discriminant(my_position):
                 del 추천픽리스트[추천픽리스트.index(3)]
         print('---추천하는 챔피언 리스트---')
         for _ in range(5):
-            for key, value in champ_dict.items():  # for name, age in dictionary.iteritems():  (for Python 2.x)
+            for key, value in champ_dict.items():
                 if value == 추천픽리스트[_][0]:
-                    print('{0} : {1}%'.format(key, round(추천픽리스트[_][1], 2)))
+                    print('{0}'.format(key), end = " ")
                     break ;
-        print('-----------------------')
+        print('\n-----------------------')
         return 추천픽리스트[:5]
 
     elif not (아군존재 and 상대존재):  # 아군x 상대x
