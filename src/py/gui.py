@@ -464,4 +464,5 @@ def discriminant(my_position):
     elif not (아군존재 and 상대존재):  # 아군x 상대x
         print('원하는 챔피언을 직접 선택하세요 ')
 
+
 root.mainloop()
