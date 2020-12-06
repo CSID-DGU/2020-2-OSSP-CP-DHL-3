@@ -357,7 +357,8 @@ def discriminant(my_position):
         position_dict = positions[0]
 
     elif my_position == 1:
-        comb_position = 2  # 정글 + 미드
+        comb_position = 0  # 정글 + 미드
+        comb_position2 = 2 # 정글 + 탑
         position_dict = positions[1]
 
     elif my_position == 2:
@@ -372,89 +373,247 @@ def discriminant(my_position):
         comb_position = 3  # 서폿 + 원딜
         position_dict = positions[4]
 
-    아군존재, 상대존재 = False, False
-    아군, 상대 = [], []
-    출력 = "추천하는 챔피언은 다음과 같습니다. \n\n"
-    for pick in team1:  # 아군 존재
-        if pick[1] == comb_position:
-            아군존재 = True
-            아군 = pick.copy()
+    if not my_position == 1:
+        # 정글이 아닌경우
+        아군존재, 상대존재 = False, False
+        아군, 아군2, 상대 = [], [],[]
+        출력 = "추천하는 챔피언은 다음과 같습니다. \n\n"
 
-    for pick in team2:  # 적군 존재
-        if pick[1] == enemy_position:
-            상대존재 = True
-            상대 = pick.copy()
-    if 아군:
-        아군[0] = champ_dict[아군[0]]
-    if 상대:
-        상대[0] = champ_dict[상대[0]]
-    if 아군존재 and 상대존재:  # 아군o 상대o
-        아군승률 = dict(comb_win_rate.loc[아군[0]][:])
-        상대승률 = dict(total_win_rate.loc[상대[0]][:])
+        for pick in team1:  # 아군 존재
+            if pick[1] == comb_position:
+                아군존재 = True
+                아군 = pick.copy()
 
-        추천픽리스트1, 추천픽리스트2, 최종추천, 리얼최종추천 = [], [], [], []
-        for k, v in 아군승률.items():
-            추천픽리스트1.append([k, v])
+        for pick in team2:  # 적군 존재
+            if pick[1] == enemy_position:
+                상대존재 = True
+                상대 = pick.copy()
+        if 아군:
+            아군[0] = champ_dict[아군[0]]
+        if 상대:
+            상대[0] = champ_dict[상대[0]]
+        if 아군존재 and 상대존재:  # 아군o 상대o다  ----------------- 밴안본
+            아군승률 = dict(comb_win_rate.loc[아군[0]][:])
+            상대승률 = dict(total_win_rate.loc[상대[0]][:])
 
-        for k, v in 상대승률.items():
-            추천픽리스트2.append([k, round(1 - v, 4)])
+            추천픽리스트1, 추천픽리스트2, 최종추천, 리얼최종추천 = [], [], [], []
+            for k, v in 아군승률.items():
+                추천픽리스트1.append([k, v])
 
-        for 픽 in zip(추천픽리스트1, 추천픽리스트2):
-            최종추천.append([픽[0][0], 픽[0][1] + 픽[1][1]])
+            for k, v in 상대승률.items():
+                추천픽리스트2.append([k, round(1 - v, 4)])
 
-        최종추천.sort(key=lambda x: x[1], reverse=True)
+            for 픽 in zip(추천픽리스트1, 추천픽리스트2):
+                최종추천.append([픽[0][0], 픽[0][1] * 픽[1][1]])
 
-        for 추천픽, 승률 in 최종추천:
-            if 추천픽 in list(position_dict.keys()):
-                if 추천픽 != 상대[0]:
-                    리얼최종추천.append([추천픽, 승률])
-        for _ in range(5):
-            for key, value in champ_dict.items():
-                if value == 리얼최종추천[_][0]:
-                    출력 += key + "   "
+            최종추천.sort(key=lambda x: x[1], reverse=True)
+
+            for 추천픽, 승률 in 최종추천:
+                if 추천픽 in list(position_dict.keys()):
+                    if 추천픽 != 상대[0]:
+                        리얼최종추천.append([추천픽, 승률])
+            for i in range(len(리얼최종추천)):
+                if 리얼최종추천[i][0] in ban:
+                    del 리얼최종추천[리얼최종추천.index(i)]
+            for _ in range(5):
+                for key, value in champ_dict.items():
+                    if value == 리얼최종추천[_][0]:
+                        출력 += key + "   "
+                        break ;
+            tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대o", 출력)
+            print(리얼최종추천)
+            print(ban)
+
+        elif not 아군존재 and 상대존재:  # 아군x 상대o다 ------------------ 밴 안본
+            상대승률 = dict(total_win_rate.loc[상대[0]][:])
+            상대승률 = sorted(상대승률.items(), key=lambda x: x[1])
+            추천픽리스트 = []
+            n = 0
+            for 추천픽, 승률 in 상대승률:
+                if n == 추천갯수:  # 10개 까지 추천해줌
+                    break
+                if 추천픽 in list(position_dict.keys()):
+                    추천픽리스트.append([추천픽, 1 - 승률])
+                    n += 1
+            for i in range(len(추천픽리스트)):
+                if 추천픽리스트[i][0] in ban:
+                    del 추천픽리스트[추천픽리스트.index(i)]
+            for _ in range(5):
+                for key, value in champ_dict.items():
+                    if value == 추천픽리스트[_][0]:
+                        출력 += key + "   "
+                        break ;
+            tk.messagebox.showinfo("챔피언 추천 알림 / 아군x 상대o", 출력)
+
+        elif 아군존재 and not 상대존재:  # 아군o 상대x
+            아군승률 = dict(comb_win_rate.loc[아군[0]][:])
+            아군승률 = sorted(아군승률.items(), key=lambda x: x[1], reverse=True)
+            추천픽리스트 = []
+            n = 0
+            for 추천픽, 승률 in 아군승률:
+                if n == 추천갯수:
                     break ;
-        tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대o", 출력)
+                if 추천픽 in list(position_dict.keys()):
+                    추천픽리스트.append([추천픽, 승률])
+                    n += 1
+            for i in range(len(추천픽리스트)):
+                if 추천픽리스트[i][0] in ban:
+                    del 추천픽리스트[추천픽리스트.index(i)]
+            for _ in range(5):
+                for key, value in champ_dict.items():
+                    if value == 추천픽리스트[_][0]:
+                        출력 += key + "   "
+                        break ;
+            tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대x", 출력)
 
-    elif not 아군존재 and 상대존재:  # 아군x 상대o
-        상대승률 = dict(total_win_rate.loc[상대[0]][:])
-        상대승률 = sorted(상대승률.items(), key=lambda x: x[1])
-        추천픽리스트 = []
-        n = 0
-        for 추천픽, 승률 in 상대승률:
-            if n == 추천갯수:  # 10개 까지 추천해줌
-                break
-            if 추천픽 in list(position_dict.keys()):
-                추천픽리스트.append([추천픽, 1 - 승률])
-                n += 1
-        for _ in range(5):
-            for key, value in champ_dict.items():
-                if value == 추천픽리스트[_][0]:
-                    출력 += key + "   "
-                    break ;
-        tk.messagebox.showinfo("챔피언 추천 알림 / 아군x 상대o", 출력)
+        elif not (아군존재 and 상대존재):  # 아군x 상대x
+            tk.messagebox.showinfo("안녕", '원하는 챔피언을 직접 선택하세요 ')
+ #------------------------------------------------------------------------jungle--------------------------------------
+    else: # 정글인 경우
+        아군존재 = 0; 상대존재 = False
+        아군, 상대 = [], []
+        출력 = "추천하는 챔피언은 다음과 같습니다. \n\n"
+        for pick in team1:  # 아군 존재          탑존재 1 미드존재 2 둘다존재 3
+            if pick[1] == comb_position or pick[1] == comb_position2:
+                if pick[1] == 0:
+                    아군존재 += 1
+                    아군.append(pick)
+                elif pick[1] == 2:
+                    아군존재 += 2
+                    아군.append(pick)
 
-    elif 아군존재 and not 상대존재:  # 아군o 상대x
-        아군승률 = dict(comb_win_rate.loc[아군[0]][:])
-        아군승률 = sorted(아군승률.items(), key=lambda x: x[1], reverse=True)
-        추천픽리스트 = []
-        n = 0
-        for 추천픽, 승률 in 아군승률:
-            if n == 추천갯수:
-                break ;
-            if 추천픽 in list(position_dict.keys()):
-                추천픽리스트.append([추천픽, 승률])
-                n += 1
-        for i in range(len(추천픽리스트)):
-            if 추천픽리스트[i][0] in ban:
-                del 추천픽리스트[추천픽리스트.index(3)]
-        for _ in range(5):
-            for key, value in champ_dict.items():
-                if value == 추천픽리스트[_][0]:
-                    출력 += key + "   "
-                    break ;
-        tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대x", 출력)
+        for pick in team2:  # 적군 존재
+            if pick[1] == enemy_position:
+                상대존재 = True
+                상대 = pick.copy()
 
-    elif not (아군존재 and 상대존재):  # 아군x 상대x
-        tk.messagebox.showinfo("안녕", '원하는 챔피언을 직접 선택하세요 ')
+        if 아군존재 == 3 and 상대존재: # 탑O 미드O 상대O (아군2명 상대 1명 존재)봄 --------------- 밴안
+            아군1승률 = dict(comb_win_rate.loc[아군[0][0]][:])
+            아군2승률 = dict(comb_win_rate.loc[아군[1][0]][:])
+            상대승률 = dict(total_win_rate.loc[상대[0]][:])
+
+            추천픽리스트1, 추천픽리스트2, 추천픽리스트3, 최종추천, 리얼최종추천 = [], [], [], [], []
+            for k, v in 아군1승률.items():
+                추천픽리스트1.append([k, v])
+            for k, v in 아군2승률.items():
+                추천픽리스트2.append([k, v])
+            for k, v in 상대승률.items():
+                추천픽리스트3.append([k, round(1 - v, 4)])
+
+            for 픽 in zip(추천픽리스트1, 추천픽리스트2, 추천픽리스트3):
+                최종추천.append([픽[0][0], 픽[0][1] * 픽[1][1] * 픽[2][1]])
+
+            최종추천.sort(key=lambda x: x[1], reverse=True)
+
+            for 추천픽, 승률 in 최종추천:
+                if 추천픽 in list(position_dict.keys()):
+                    if 추천픽 != 상대[0]:
+                        리얼최종추천.append([추천픽, 승률])
+            for i in range(len(리얼최종추천)):
+                if 리얼최종추천[i][0] in ban:
+                    del 리얼최종추천[리얼최종추천.index(i)]
+            for _ in range(5):
+                for key, value in champ_dict.items():
+                    if value == 리얼최종추천[_][0]:
+                        출력 += key + "   "
+                        break;
+            tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대o", 출력)
+        elif 아군존재 == 3 and not 상대존재:  # 아군둘다o 상대x
+            아군1승률 = dict(comb_win_rate.loc[아군[0][0]][:])
+            아군2승률 = dict(comb_win_rate.loc[아군[1][0]][:])
+            추천픽리스트1, 추천픽리스트2, 최종추천 = [], [], []
+            for k, v in 아군1승률.items():
+                추천픽리스트1.append([k, v])
+            for k, v in 아군2승률.items():
+                추천픽리스트2.append([k, v])
+            for 픽 in zip(추천픽리스트1, 추천픽리스트2):
+                최종추천.append([픽[0][0], 픽[0][1] * 픽[1][1]])
+
+            최종추천.sort(key=lambda x: x[1], reverse=True)
+
+            for i in range(len(최종추천)):
+                if 최종추천[i][0] in ban:
+                    del 최종추천[최종추천.index(i)]
+            for _ in range(5):
+                for key, value in champ_dict.items():
+                    if value == 최종추천[_][0]:
+                        출력 += key + "   "
+                        break;
+            tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대o", 출력)
+
+        elif 아군존재 == 0 and 상대존재:  # 아군x 상대o다
+            상대승률 = dict(total_win_rate.loc[상대[0]][:])
+            상대승률 = sorted(상대승률.items(), key=lambda x: x[1])
+            추천픽리스트 = []
+            n = 0
+            for 추천픽, 승률 in 상대승률:
+                if n == 추천갯수:  # 10개 까지 추천해줌
+                    break
+                if 추천픽 in list(position_dict.keys()):
+                    추천픽리스트.append([추천픽, 1 - 승률])
+                    n += 1
+            for i in range(len(추천픽리스트)):
+                if 추천픽리스트[i][0] in ban:
+                    del 추천픽리스트[추천픽리스트.index(i)]
+            for _ in range(5):
+                for key, value in champ_dict.items():
+                    if value == 추천픽리스트[_][0]:
+                        출력 += key + "   "
+                        break;
+            tk.messagebox.showinfo("챔피언 추천 알림 / 아군x 상대o", 출력)
+
+        elif (아군존재 == 1 or 아군존재 == 2) and 상대존재: # 아군 1명 상대 1명 존
+            아군승률 = dict(comb_win_rate.loc[아군[0]][:])
+            상대승률 = dict(total_win_rate.loc[상대[0]][:])
+
+            추천픽리스트1, 추천픽리스트2, 최종추천, 리얼최종추천 = [], [], [], []
+            for k, v in 아군승률.items():
+                추천픽리스트1.append([k, v])
+
+            for k, v in 상대승률.items():
+                추천픽리스트2.append([k, round(1 - v, 4)])
+
+            for 픽 in zip(추천픽리스트1, 추천픽리스트2):
+                최종추천.append([픽[0][0], 픽[0][1] * 픽[1][1]])
+
+            최종추천.sort(key=lambda x: x[1], reverse=True)
+
+            for 추천픽, 승률 in 최종추천:
+                if 추천픽 in list(position_dict.keys()):
+                    if 추천픽 != 상대[0]:
+                        리얼최종추천.append([추천픽, 승률])
+            for i in range(len(리얼최종추천)):
+                if 리얼최종추천[i][0] in ban:
+                    del 리얼최종추천[리얼최종추천.index(i)]
+            for _ in range(5):
+                for key, value in champ_dict.items():
+                    if value == 리얼최종추천[_][0]:
+                        출력 += key + "   "
+                        break;
+            tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대o", 출력)
+
+        elif (아군존재 == 1 or 아군존재 == 2) and not 상대존재: # 아군 1명존재 상대 x
+            아군승률 = dict(comb_win_rate.loc[아군[0]][:])
+            아군승률 = sorted(아군승률.items(), key=lambda x: x[1], reverse=True)
+            추천픽리스트 = []
+            n = 0
+            for 추천픽, 승률 in 아군승률:
+                if n == 추천갯수:
+                    break;
+                if 추천픽 in list(position_dict.keys()):
+                    추천픽리스트.append([추천픽, 승률])
+                    n += 1
+            for i in range(len(추천픽리스트)):
+                if 추천픽리스트[i][0] in ban:
+                    del 추천픽리스트[추천픽리스트.index(i)]
+            for _ in range(5):
+                for key, value in champ_dict.items():
+                    if value == 추천픽리스트[_][0]:
+                        출력 += key + "   "
+                        break;
+            tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대x", 출력)
+        else:
+            tk.messagebox.showinfo("안녕", '원하는 챔피언을 직접 선택하세요 ')
+
 
 root.mainloop()
