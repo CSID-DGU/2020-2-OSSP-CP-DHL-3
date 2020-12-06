@@ -346,7 +346,7 @@ def click_pick():
 
 def discriminant():
     bans_list = ban.copy()
-    bans_list = map(lambda x: champ_dict[x], ban)
+    bans_list = map(lambda x: champ_dict[x], bans_list)
     my_position = CheckVariety.get()
 
     추천갯수 = 10
