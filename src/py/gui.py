@@ -2,11 +2,11 @@ import tkinter as tk
 import tkinter.messagebox
 import pickle
 
-x = 960
-y = 690
+x, y = 960, 690
 zoom_size = 24
 subsample_size = 30
 size = str(x) + "x" + str(y)
+
 root = tk.Tk()
 root.title('리그오브레전드 챔피언 추천시스템 - DHL')
 root.geometry(size)
@@ -222,11 +222,11 @@ def click_pick():
     select_line_num = CheckVariety.get()
     select_user = select.get()
     if (select_user == -1):
-        print('유저를 선택해주세요.')
+        tk.messagebox.showwarning("메시지 상자", "유저를 선택해주세요.")
     if (select_champion_num == -1):
-        print('챔피언을 선택해주세요.')
+        tk.messagebox.showwarning("메시지 상자", "챔피언을 선택해주세요.")
     if (select_line_num == -1):
-        print('라인을 정해주세요.')
+        tk.messagebox.showwarning("메시지 상자", "라인을 선택해주세요.")
     else:
         if (select_user == 1):
             if (not l1_flag):
@@ -374,6 +374,7 @@ def discriminant(my_position):
 
     아군존재, 상대존재 = False, False
     아군, 상대 = [], []
+    출력 = "추천하는 챔피언은 다음과 같습니다. \n\n"
     for pick in team1:  # 아군 존재
         if pick[1] == comb_position:
             아군존재 = True
@@ -407,7 +408,6 @@ def discriminant(my_position):
             if 추천픽 in list(position_dict.keys()):
                 if 추천픽 != 상대[0]:
                     리얼최종추천.append([추천픽, 승률])
-        출력 = "추천하는 챔피언은 다음과 같습니다. \n\n"
         for _ in range(5):
             for key, value in champ_dict.items():
                 if value == 리얼최종추천[_][0]:
@@ -426,12 +426,10 @@ def discriminant(my_position):
             if 추천픽 in list(position_dict.keys()):
                 추천픽리스트.append([추천픽, 1 - 승률])
                 n += 1
-        출력 = "추천하는 챔피언은 다음과 같습니다. \n\n"
         for _ in range(5):
             for key, value in champ_dict.items():
                 if value == 추천픽리스트[_][0]:
                     출력 += key + "   "
-                    # print('{0}'.format(key), end = " ")
                     break ;
         tk.messagebox.showinfo("챔피언 추천 알림 / 아군x 상대o", 출력)
 
@@ -449,12 +447,10 @@ def discriminant(my_position):
         for i in range(len(추천픽리스트)):
             if 추천픽리스트[i][0] in ban:
                 del 추천픽리스트[추천픽리스트.index(3)]
-        출력 = "추천하는 챔피언은 다음과 같습니다. \n\n"
         for _ in range(5):
             for key, value in champ_dict.items():
                 if value == 추천픽리스트[_][0]:
                     출력 += key + "   "
-                    # print('{0}'.format(key), end = " ")
                     break ;
         tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대x", 출력)
 
