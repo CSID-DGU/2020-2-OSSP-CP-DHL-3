@@ -337,7 +337,7 @@ def click_pick():
             team1.append([champion_list[select_champion_num], select_line_num])
         elif (6 <= select_user and select_user <= 10):
             team2.append([champion_list[select_champion_num], select_line_num])
-            ban.append(select_champion_num)
+            ban.append(champion_list[select_champion_num])
         elif (11 <= select_user and select_user <= 20):
             ban.append(champion_list[select_champion_num])
         button_m[select_champion_num].config(state=tk.DISABLED)
@@ -372,7 +372,7 @@ def discriminant():
     if not my_position == 1:
         # 정글이 아닌경우
         아군존재, 상대존재 = False, False
-        아군, 아군2, 상대 = [], [],[]
+        아군, 아군2, 상대 = [], [], []
         출력 = "추천하는 챔피언은 다음과 같습니다. \n\n"
 
         for pick in team1:  # 아군 존재
