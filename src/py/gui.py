@@ -159,20 +159,16 @@ for i, _ in enumerate(line):
 choice_frame = tk.Frame(option_frame, width=x * 0.6, height=y * 0.1)
 choice_frame.grid(row=2, column=0)
 
-rec_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.33, height=y * 0.1)
+rec_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.5, height=y * 0.1)
 rec_frame.grid(row=0, column=0)
-button_recommend = tk.Button(rec_frame, width=21, height=3, text="추천받기", command=lambda : discriminant(select_line_num))
+button_recommend = tk.Button(rec_frame, width=25, height=3, text="추천받기", command=lambda : discriminant())
 button_recommend.pack()
 
-select_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.34, height=y * 0.1)
+select_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.5, height=y * 0.1)
 select_frame.grid(row=0, column=1)
-button_pick = tk.Button(select_frame, width=26, height=3, text="선택하기")
+button_pick = tk.Button(select_frame, width=25, height=3, text="선택하기", command=lambda: click_pick())
 button_pick.pack()
 
-rec_text_frame = tk.Frame(choice_frame, width=x * 0.6 * 0.328, height=y * 0.1)
-rec_text_frame.grid(row=0, column=2)
-button_request = tk.Button(rec_text_frame, width=21, height=3, text="추천챔피언")
-button_request.pack()
 
 champion_list = ['가렌', '갈리오', '갱플랭크', '그라가스', '그레이브즈', '나르', '나미', '나서스', '노틸러스', '녹턴', '누누', '니달리', '니코', '다리우스',
                  '다이애나', '드레이븐', '라이즈', '라칸', '람머스', '럭스', '럼블', '레넥톤', '레오나', '렉사이', '렝가', '루시안', '룰루', '르블랑', '리 신',
@@ -210,7 +206,6 @@ canvas.config(scrollregion=canvas.bbox("all"))
 for i, v in enumerate(champion_list):
     button_m[i].config(command=lambda idx=i: click_champion(idx))
 
-button_pick.config(command=lambda: click_pick())
 
 def click_champion(num):
     global select_champion_num
@@ -348,7 +343,8 @@ def click_pick():
         button_m[select_champion_num].config(state=tk.DISABLED)
         select_champion_num = None
 
-def discriminant(my_position):
+def discriminant():
+    my_position = CheckVariety.get()
     추천갯수 = 10
     enemy_position = my_position  # 적 포지션 = 내 포지션
     position_dict = {}
