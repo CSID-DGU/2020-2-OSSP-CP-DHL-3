@@ -352,25 +352,26 @@ def discriminant():
     추천갯수 = 10
     enemy_position = my_position  # 적 포지션 = 내 포지션
     position_dict = {}
-    if my_position == 0:
-        comb_position = 1  # 탑 -> 정글
+    if my_position == 0: # my_postion is top
+        comb_position = 1  # 탑 => 정글
         position_dict = positions[0]
 
-    elif my_position == 1:
-        comb_position = 0  # 정글 + 탑
-        comb_position2 = 2 # 정글 + 미드
+    elif my_position == 1: # my_postion is jungle
+                            # 정글은 두 포지션 유무를 확인
+        comb_position = 0  # 정글 => 탑
+        comb_position2 = 2 # 정글 => 미드
         position_dict = positions[1]
 
-    elif my_position == 2:
+    elif my_position == 2: # my_postion is mid
         comb_position = 1  # 미드 + 정글
         position_dict = positions[2]
 
-    elif my_position == 3:
-        comb_position = 4  # 원딜 + 서폿
+    elif my_position == 3: # my_postion is carry
+        comb_position = 4  # 원딜 => 서폿
         position_dict = positions[3]
 
-    elif my_position == 4:
-        comb_position = 3  # 서폿 + 원딜
+    elif my_position == 4: # my_postion is sup
+        comb_position = 3  # 서폿 => 원딜
         position_dict = positions[4]
 
     if not my_position == 1:
@@ -392,7 +393,7 @@ def discriminant():
             아군[0] = champ_dict[아군[0]]
         if 상대:
             상대[0] = champ_dict[상대[0]]
-        if 아군존재 and 상대존재:  # 아군o 상대o다  ----------------- 밴안본
+        if 아군존재 and 상대존재:  # 아군o 상대o
             아군승률 = dict(comb_win_rate.loc[아군[0]][:])
             상대승률 = dict(total_win_rate.loc[상대[0]][:])
 
