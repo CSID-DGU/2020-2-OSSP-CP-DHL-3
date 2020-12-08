@@ -169,7 +169,6 @@ select_frame.grid(row=0, column=1)
 button_pick = tk.Button(select_frame, width=25, height=3, text="선택하기", command=lambda: click_pick())
 button_pick.pack()
 
-
 champion_list = ['가렌', '갈리오', '갱플랭크', '그라가스', '그레이브즈', '나르', '나미', '나서스', '노틸러스', '녹턴', '누누', '니달리', '니코', '다리우스',
                  '다이애나', '드레이븐', '라이즈', '라칸', '람머스', '럭스', '럼블', '레넥톤', '레오나', '렉사이', '렝가', '루시안', '룰루', '르블랑', '리 신',
                  '리븐', '리산드라', '릴리아', '마스터 이', '마오카이', '말자하', '말파이트', '모데카이저', '모르가나', '문도 박사', '미스 포츈', '바드', '바루스',
@@ -668,7 +667,7 @@ def discriminant():
             #     for key, value in champ_dict.items():
             #         if value == 추천픽리스트[_][0]:
             #             출력 += key + "   "
-            #             break;
+            #             break ;
             num = 5
             for _ in range(10):
                 for key, value in champ_dict.items():
@@ -680,6 +679,5 @@ def discriminant():
             tk.messagebox.showinfo("챔피언 추천 알림 / jg 아군1명존재 상대x", 출력)
         else:
             tk.messagebox.showinfo("안녕", '원하는 챔피언을 직접 선택하세요 ')
-
 
 root.mainloop()
