@@ -1,2 +1,5 @@
 .idea
 .ipynb_checkpoints
+data/csv/cgm_match1.csv
+data/csv/cgm_match2.csv
+src/ipynb/test.json
