@@ -349,31 +349,33 @@ def discriminant():
     my_position = CheckVariety.get()
 
     추천개수 = 10
+    top = 0; jungle = 1; mid = 2; carry = 3; sup = 4
+
     enemy_position = my_position  # 적 포지션 = 내 포지션
     position_dict = {}
-    if my_position == 0: # my_postion is top
-        comb_position = 1  # 탑 => 정글
+    if my_position == top: # my_postion is top
+        comb_position = jungle # 탑 => 정글
         position_dict = positions[0]
 
-    elif my_position == 1: # my_postion is jungle
+    elif my_position == jungle: # my_postion is jungle
                             # 정글은 두 포지션 유무를 확인
-        comb_position = 0  # 정글 => 탑
-        comb_position2 = 2 # 정글 => 미드
+        comb_position = top  # 정글 => 탑
+        comb_position2 = mid # 정글 => 미드
         position_dict = positions[1]
 
-    elif my_position == 2: # my_postion is mid
-        comb_position = 1  # 미드 + 정글
+    elif my_position == mid: # my_postion is mid
+        comb_position = jungle  # 미드 + 정글
         position_dict = positions[2]
 
-    elif my_position == 3: # my_postion is carry
-        comb_position = 4  # 원딜 => 서폿
+    elif my_position == carry: # my_postion is carry
+        comb_position = sup  # 원딜 => 서폿
         position_dict = positions[3]
 
-    elif my_position == 4: # my_postion is sup
-        comb_position = 3  # 서폿 => 원딜
+    elif my_position == sup: # my_postion is sup
+        comb_position = carry  # 서폿 => 원딜
         position_dict = positions[4]
 
-    if not my_position == 1:
+    if not my_position == jungle:
         # 정글이 아닌경우
         아군존재, 상대존재 = False, False
         아군, 아군2, 상대 = [], [], []
@@ -421,7 +423,7 @@ def discriminant():
                         num -= 1
                         break
                 if num == 0: break
-            tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대o", 출력)
+            tk.messagebox.showinfo("챔피언 추천 알림", 출력)
 
 
         elif not 아군존재 and 상대존재:  # 아군x 상대o다 ------------------ 밴 안본
@@ -444,7 +446,7 @@ def discriminant():
                         num -= 1
                         break
                 if num == 0: break
-            tk.messagebox.showinfo("챔피언 추천 알림 / 아군x 상대o", 출력)
+            tk.messagebox.showinfo("챔피언 추천 알림 ", 출력)
 
         elif 아군존재 and not 상대존재:  # 아군o 상대x
             아군승률 = dict(comb_win_rate.loc[아군[0]][:])
@@ -466,7 +468,7 @@ def discriminant():
                         num -= 1
                         break
                 if num == 0: break
-            tk.messagebox.showinfo("챔피언 추천 알림 / 아군o 상대x", 출력)
+            tk.messagebox.showinfo("챔피언 추천 알림", 출력)
 
         elif not (아군존재 and 상대존재):  # 아군x 상대x
             tk.messagebox.showinfo("!!추천불가 알림!!", '원하는 챔피언을 직접 선택하세요 ')
@@ -527,7 +529,7 @@ def discriminant():
                         num -= 1
                         break
                 if num == 0: break
-            tk.messagebox.showinfo("챔피언 추천 알림 / 아군 미드o 탑o 상대o", 출력)
+            tk.messagebox.showinfo("챔피언 추천 알림", 출력)
         elif 아군존재 == 3 and not 상대존재:  # 아군둘다o 상대x
             아군1승률 = dict(comb_win_rate.loc[아군[0][0]][:])
             아군2승률 = dict(comb_win_rate.loc[아군[1][0]][:])
@@ -550,7 +552,7 @@ def discriminant():
                         num -= 1
                         break
                 if num == 0: break
-            tk.messagebox.showinfo("챔피언 추천 알림 / jg 아군 미드o 탑o 상대x", 출력)
+            tk.messagebox.showinfo("챔피언 추천 알림", 출력)
 
         elif 아군존재 == 0 and 상대존재:  # 아군x 상대o다
             상대승률 = dict(total_win_rate.loc[상대[0]][:])
@@ -572,7 +574,7 @@ def discriminant():
                         num -= 1
                         break
                 if num == 0: break
-            tk.messagebox.showinfo("챔피언 추천 알림 / jg 아군x 상대o", 출력)
+            tk.messagebox.showinfo("챔피언 추천 알림 ", 출력)
 
         elif (아군존재 == 1 or 아군존재 == 2) and 상대존재: # 아군 1명 상대 1명 존
             아군승률 = dict(comb_win_rate.loc[아군[0][0]][:])
@@ -603,7 +605,7 @@ def discriminant():
                         num -= 1
                         break
                 if num == 0: break
-            tk.messagebox.showinfo("챔피언 추천 알림 / jg 아군1명존재 상대o", 출력)
+            tk.messagebox.showinfo("챔피언 추천 알림 ", 출력)
 
         elif (아군존재 == 1 or 아군존재 == 2) and not 상대존재: # 아군 1명존재 상대 x
             아군승률 = dict(comb_win_rate.loc[아군[0][0]][:])
@@ -625,7 +627,7 @@ def discriminant():
                         num -= 1
                         break
                 if num == 0: break
-            tk.messagebox.showinfo("챔피언 추천 알림 / jg 아군1명존재 상대x", 출력)
+            tk.messagebox.showinfo("챔피언 추천 알림 ", 출력)
         else:
             tk.messagebox.showinfo("!!추천불가 알림!!", '원하는 챔피언을 직접 선택하세요 ')
 
