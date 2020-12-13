@@ -520,7 +520,7 @@ def discriminant():
                         리얼최종추천.append([추천픽, 승률])
 
             num = 5
-            for _ in range(10):
+            for _ in range(추천개수):
                 for key, value in champ_dict.items():
                     if value == 리얼최종추천[_][0] and value not in bans_list:
                         출력 += key + "   "
@@ -543,7 +543,7 @@ def discriminant():
 
 
             num = 5
-            for _ in range(10):
+            for _ in range(추천개수):
                 for key, value in champ_dict.items():
                     if value == 최종추천[_][0] and value not in bans_list:
                         출력 += key + "   "
@@ -565,7 +565,7 @@ def discriminant():
                     n += 1
 
             num = 5
-            for _ in range(10):
+            for _ in range(추천개수):
                 for key, value in champ_dict.items():
                     if value == 추천픽리스트[_][0] and value not in bans_list:
                         출력 += key + "   "
@@ -596,7 +596,7 @@ def discriminant():
                         리얼최종추천.append([추천픽, 승률])
 
             num = 5
-            for _ in range(10):
+            for _ in range(추천개수):
                 for key, value in champ_dict.items():
                     if value == 리얼최종추천[_][0] and value not in bans_list:
                         출력 += key + "   "
@@ -618,7 +618,7 @@ def discriminant():
                     n += 1
 
             num = 5
-            for _ in range(10):
+            for _ in range(추천개수):
                 for key, value in champ_dict.items():
                     if value == 추천픽리스트[_][0] and value not in bans_list:
                         출력 += key + "   "
