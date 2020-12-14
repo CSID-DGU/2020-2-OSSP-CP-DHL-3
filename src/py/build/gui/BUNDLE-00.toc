@@ -1,0 +1,3 @@
+([('gui',
+   '/Volumes/GoogleDrive/내 드라이브/dhl/src/py/dist/gui',
+   'EXECUTABLE')],)
